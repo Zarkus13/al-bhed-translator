@@ -39,13 +39,13 @@
 
 			function translate($word) {
 				global $table;
-				$translated = array();
+				$word = str_split($word);
 
-				foreach(str_split($word) as $letter) {
-					array_push($translated, $table[$letter]);
+				foreach($word as $key => $letter) {
+					$word[$key] = $table[$letter];
 				}
 
-				return implode($translated);
+				return implode($word);
 			}
 
 			echo translate('apricot');
