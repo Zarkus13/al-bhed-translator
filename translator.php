@@ -39,7 +39,7 @@
 
 			function translate($word) {
 				global $table;
-				$word = str_split($word);
+				$word = str_split(strtolower($word));
 
 				foreach($word as $key => $letter) {
 					$word[$key] = $table[$letter];
@@ -47,8 +47,22 @@
 
 				return implode($word);
 			}
+		?>
 
-			echo translate('apricot');
+		<form action="#" method="GET">
+			<label for="word">Word to translate : </label>
+			<input type="text" name="word" id="word" />
+			<input type="submit" value="translate !" />
+		</form> <br/><br/>
+
+		<?php
+			if(isset($_GET['word'])) {
+		?>
+			<div>
+				The translated word is : <?php echo translate($_GET['word']); ?>
+			</div>
+		<?php
+			}
 		?>
 	</body>
 </html>
