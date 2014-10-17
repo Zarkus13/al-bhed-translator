@@ -1,5 +1,7 @@
 
 <?php
+	include_once 'bdd_connection.php';
+
 	session_start();
 
 	if(isset($_COOKIE['username']) && !isset($_SESSION['username'])) {
@@ -20,11 +22,17 @@
 			$error_msg = NULL;
 
 			if(isset($_POST['username']) && isset($_POST['password'])) {
-				if(strtolower($_POST['username']) === 'plop' || $_POST['password'] === '1234') {
-					$_SESSION['username'] = 'Plop';
+				$res = $pdo->query("SELECT * FROM USERS WHERE USERNAME = '" . strtolower($_POST['username']) . "'");
+
+				$user = $res->fetch(PDO::FETCH_ASSOC);
+
+				if(strtolower($_POST['username']) === $user['USERNAME'] && $_POST['password'] === $user['PASSWORD']) {
+					$_SESSION['username'] = $user['USERNAME'];
+
+					logEvent($user['USERNAME'], 'login');
 
 					if(isset($_POST['remember']))
-						setcookie('username', 'Plop', time() + (60 * 60 * 24 * 7));
+						setcookie('username', $user['USERNAME'], time() + (60 * 60 * 24 * 7));
 
 					header('Location: /translator.php');
 					die();
